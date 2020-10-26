@@ -1,0 +1,206 @@
+package xuLy;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import quanLyNhanSu.CongTy;
+import quanLyNhanSu.GiamDoc;
+import quanLyNhanSu.NhanSu;
+import quanLyNhanSu.NhanVien;
+import quanLyNhanSu.TruongPhong;
+
+public class MAIN {
+	public static void main(final String[] args) {
+
+		final String bienNull = null;
+
+		System.out.println("".equals(bienNull));
+
+		final Scanner scanner = new Scanner(System.in);
+		final CongTy congTy = new CongTy("Cyber Group", "CG", "0286236876", 1000000000);
+		themDummyData(congTy);
+
+		congTy.xuatThongTin();
+		System.out.println();
+
+		int luaChon;
+		int luaChonKey3;
+		int luaChonThem;
+		/*
+		 * Menu quản lý nhân sự
+		 */
+		do {
+			luaChon = inMenu(scanner);
+			boolean check=false;
+			switch (luaChon) {
+				case 1:
+					congTy.nhapThongTin(scanner);
+					break;
+				case 2:
+					congTy.phanBoNhanVienRanDom(scanner);
+					break;
+				case 3:
+					luaChonKey3 = inMenuKey3(scanner);
+					switch (luaChonKey3) {
+						case 1:
+							luaChonThem=inMenuThem(scanner);
+							switch (luaChonThem) {
+								case 1:
+									NhanVien nv = new NhanVien();
+									System.out.println("Thêm nhân viên");
+									nv.nhapThongTin();
+									congTy.dsTruongPhong(nv);
+									check=congTy.themNhanSu(nv);
+									break;
+								case 2:
+									TruongPhong tp = new TruongPhong();
+									System.out.println("Thêm trưởng phòng");
+									tp.nhapThongTin();
+									check=congTy.themNhanSu(tp);
+									break;
+								case 3:
+									GiamDoc gd= new GiamDoc();
+									System.out.println("Thêm giám đốc");
+									gd.nhapThongTin();
+									check=congTy.themNhanSu(gd);
+									break;
+								default:
+									System.out.println("Nhập lựa chọn ");
+									break;
+							}
+							
+							if (check == true)
+							System.out.println("Thêm thành công");
+							else
+							System.out.println("Thêm thất bại");
+							break;
+						case 2:
+						System.out.println("Nhập vào mã số nhân viên muốn xóa ");
+						String ma;
+						ma = scanner.nextLine();
+						boolean check2=congTy.xoaNhanSu(ma);
+							if (check2 == true)
+							System.out.println("Xóa thành công");
+							else
+							System.out.println("Xóa thất bại");
+						break;
+						case 3:
+						System.out.println("Thoát chức năng số 3!!!");
+						default:
+							System.out.println("Vui lòng nhập lựa chọn từ 1-3");
+					}
+					break;
+				case 4:
+					congTy.xuatThongTin();
+					break;
+				case 5:
+					System.out.println("Tổng lương: " + congTy.tinhTongLuong());
+					break;
+				case 6:
+					System.out.println("Nhân viên có lương cao nhất:");
+
+					final NhanSu nhanVien = congTy.timNhanVienLuongCaoNhat();
+					nhanVien.xuatThongTin();
+
+					nhanVien.setMaSo("XXXXXXX");
+
+					break;
+				case 7:
+					System.out.println("Trưởng phòng có số lượng nhân viên dưới quyền nhiều nhất:");
+					final NhanSu truongPhong = congTy.timTruongPhongQuanLyNhieuNhat();
+					if (truongPhong != null)
+						truongPhong.xuatThongTin();
+					break;
+				case 8:
+					congTy.sapXepTheoTen();
+					break;
+				case 9:
+					congTy.sapXepTheoLuong();
+					break;
+				case 10:
+				System.out.print("Giám đốc có số cổ phần nhiều nhất là");
+					congTy.timGiamDocCoCoPhanNhieuNhat().xuatThongTin();
+					break;
+				case 11:
+					congTy.thuNhapCuaTungGiamDoc();
+					break;
+				case 0:
+
+					System.out.println("Kết thúc chương trình.");
+					break;
+				default:
+					System.out.println("Lựa chọn không hợp lệ.");
+					break;
+			}
+
+			System.out.println("\nNhấn phím bất kì để tiếp tục để tiếp tục!!");
+			scanner.nextLine();
+		} while (luaChon != 0);
+
+	}
+
+	static int inMenu(final Scanner sc) {
+		final int spaceNum = 20;
+		System.out.println(
+				String.format("%" + spaceNum + "s", "") + "QUẢN LÝ NHÂN SỰ" + String.format("%" + spaceNum + "s", ""));
+		System.out.println("Menu:");
+		System.out.println("\t1. Nhập thông tin công ty");
+		System.out.println("\t2. Phân bổ Nhân viên vào Trưởng phòng");
+		System.out.println("\t3. Thêm, xóa thông tin một nhân sự");
+		System.out.println("\t4. Xuất ra thông tin toàn bộ người trong công ty");
+		System.out.println("\t5. Tính và xuất tổng lương cho toàn công ty");
+		System.out.println("\t6. Tìm Nhân viên thường có lương cao nhất");
+		System.out.println("\t7. Tìm Trưởng Phòng có số lượng nhân viên dưới quyền nhiều nhất");
+		System.out.println("\t8. Sắp xếp nhân viên toàn công ty theo thứ tự abc");
+		System.out.println("\t9. Sắp xếp nhân viên toàn công ty theo thứ tự lương giảm dần");
+		System.out.println("\t10. Tìm Giám Đốc có số lượng cổ phần nhiều nhất");
+		System.out.println("\t11. Tính và Xuất tổng THU NHẬP của từng Giám Đốc");
+		System.out.println("\t0. Thoát.");
+		System.out.print("Lựa chọn: ");
+		return Integer.parseInt(sc.nextLine());
+	}
+
+	static int inMenuKey3(final Scanner sc) {
+
+		System.out.println("Menu:");
+		System.out.println("\t1.Thêm nhân sự");
+		System.out.println("\t2. Xóa nhân sự");
+		System.out.println("\t3. Thoát");
+
+		System.out.print("Lựa chọn: ");
+		return Integer.parseInt(sc.nextLine());
+	}
+
+	static int inMenuThem(final Scanner sc) {
+
+		System.out.println("Menu:");
+		System.out.println("\t1.Thêm nhân viên");
+		System.out.println("\t2.Thêm Trưởng phòng");
+		System.out.println("\t3.Thêm giám đốc");
+		System.out.println("\t4. Thoát");
+		System.out.print("Lựa chọn: ");
+		return Integer.parseInt(sc.nextLine());
+	}
+	static void themDummyData(final CongTy cty) {
+		cty.themNhanSu(new NhanVien("", "Tuấn", "0369296613", 25, 100));
+		cty.themNhanSu(new NhanVien("", "Lâm", "0369296614", 21, 100));
+		cty.themNhanSu(new NhanVien("", "Trần", "0369296615", 26, 100));
+		cty.themNhanSu(new NhanVien("", "Khang", "0369296213", 21, 100));
+		cty.themNhanSu(new NhanVien("", "An", "0369296663", 20, 100));
+		cty.themNhanSu(new NhanVien("", "Khánh", "0369766613", 22, 100));
+		cty.themNhanSu(new NhanVien("", "Phong", "0369216613", 22, 100));
+		cty.themNhanSu(new NhanVien("", "Thanh", "0369896613", 22, 100));
+		cty.themNhanSu(new NhanVien("", "Chí", "0369200613", 22, 100));
+		cty.themNhanSu(new NhanVien("", "Tuấn", "0369226613", 22, 100));
+		cty.themNhanSu(new NhanVien("", "Trí", "0369296513", 22, 100));
+		
+		cty.themNhanSu(new TruongPhong("", "Lee", "0909001002", 20, 200, 0));
+		cty.themNhanSu(new TruongPhong("", "Anh", "0909001003", 20, 200, 0));
+		cty.themNhanSu(new TruongPhong("", "Tú", "0909001004", 20, 200, 0));
+		
+		cty.themNhanSu(new GiamDoc("", "Vượng", "0900000001", 15, 300, 75));
+		
+	}
+
+}
+
